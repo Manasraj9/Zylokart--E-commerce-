@@ -6,10 +6,78 @@ import Footer from '../components/Footer';
 import { toast } from 'react-toastify';
 
 const Login = () => {
-  return (
-    <div>
-      <Navbar />
-      <div className='flex justify-center'>
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
+    const [rememberMe, setRememberMe] = useState(false);
+    const [isTyping, setIsTyping] = useState(false);
+    const navigate = useNavigate();
+
+    const handleLogin = async (e) => {
+        e.preventDefault();
+
+        try {
+            const response = await fetch('http://localhost:1337/api/auth/local', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ identifier: email, password }),
+            });
+            const data = await response.json();
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Login failed. Please check your credentials.');
+            }
+
+            if (data.jwt && data.user) {
+                // Store token and user data in localStorage
+                localStorage.setItem('token', data.jwt);
+                localStorage.setItem('userType', data.user.userType || 'Guest'); // Default to 'Guest' if undefined
+                localStorage.setItem('loginTime', new Date().getTime());
+
+                toast.success('Login successful!');
+                const token = localStorage.getItem('token');
+
+                // Print it to the console
+                console.log(token);
+                console.log(data.user.email)
+                // Redirect based on userType
+                if (data.user.userType === 'Admin') {
+                    navigate('/Admin'); // Admin homepage
+                } else if (data.user.userType === 'Customer') {
+                    navigate('/Customer'); // Customer
+                } else if (data.user.userType === 'Seller') {
+                    navigate('/Seller'); // Seller
+                } else {
+                    console.warn('Unknown userType:', data.user.userType);
+                    navigate('/'); // Default fallback homepage
+                }
+            } else {
+                toast.error(data.message || 'Unexpected error. Please try again.');
+            }
+        } catch (error) {
+            console.error('Error during login:', error.message);
+            toast.error(`An error occurred: ${error.message}`);
+        }
+    };
+
+    const handleCheckboxChange = () => {
+        setRememberMe(!rememberMe);
+    };
+
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
+    };
+
+    const handlePasswordChange = (e) => {
+        setPassword(e.target.value);
+        setIsTyping(e.target.value.length > 0);
+    };
+
+    return (
+        <div>
+            <Navbar />
+            <div className='flex justify-center'>
                 <div>
                     <img src="/images/Login.svg" alt="page for Login" className="w-[780px] h-[650px] bg-white" />
                 </div>
@@ -79,8 +147,9 @@ const Login = () => {
                     </div>
                 </div>
             </div>
-    </div>
-  )
-}
+            <Footer />
+        </div>
+    );
+};
 
-export default Login
+export default Login;
