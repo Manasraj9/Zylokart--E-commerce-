@@ -1,2 +1,2 @@
-# Zylokart (E-commerce)
+# Zylokart
  An E-commerce Website
