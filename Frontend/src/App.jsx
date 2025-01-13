@@ -11,6 +11,13 @@ import CustomerHomepage from './pages/Customer/CustomerHomepage';
 
 {/* Seller Imports */}
 import SellerHomepage from './pages/Seller/SellerHomepage';
+import SellerAddProduct from './pages/Seller/SellerAddProduct';
+import SellerProduct from './pages/Seller/SellerProduct';
+import SellerNotification from './pages/Seller/SellerNotifiction';
+import SellerRevenue from './pages/Seller/SellerRevenue';
+import SHelp from './pages/Seller/SHelp';
+import SOrderManagement from './pages/Seller/SOrderManagement';
+import SSettings from './pages/Seller/SSettings';
 
 {/* Admin Imports */}
 import AdminHomepage from './pages/Admin/AdminHomepage';
@@ -29,7 +36,14 @@ const App = () => {
 
         {/* Seller Routes */}
         <Route path="/Seller" element={<SellerHomepage />} />
-
+        <Route path="/SAddProduct" element={<SellerAddProduct />} />
+        <Route path="/SProducts" element={<SellerProduct />} />
+        <Route path="/SNotification" element={<SellerNotification />} />
+        <Route path="/SRevenue" element={<SellerRevenue />} />
+        <Route path="/SHelp" element={<SHelp />} />
+        <Route path="/SOrderManagement" element={<SOrderManagement />} />
+        <Route path="/SSettings" element={<SSettings />} />
+        
         {/* Admin Routes */}
         <Route path="/Admin" element={<AdminHomepage />} />
 
