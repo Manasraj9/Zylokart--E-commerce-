@@ -102,3 +102,4 @@ node_modules
 
 coverage
 
+.strapi-updater
