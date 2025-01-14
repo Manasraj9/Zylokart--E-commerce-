@@ -16,7 +16,7 @@ const SellerNavbar = () => {
         <div>
           <ul className='flex gap-5 items-center'>
             <li>
-              <Link to="/cart">
+              <Link to="/SAddProduct">
                 <IoMdAddCircle className='text-4xl' />
               </Link>
             </li>
