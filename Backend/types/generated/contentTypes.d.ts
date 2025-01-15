@@ -395,22 +395,23 @@ export interface ApiProductProduct extends Schema.CollectionType {
         'Industrial and Professional Supplies',
         'Others'
       ]
-    > &
-      Attribute.Required;
-    Product_Description: Attribute.Text & Attribute.Required;
-    Product_DiscountedPrice: Attribute.Integer;
-    Product_FeaturesImage: Attribute.Media<
-      'images' | 'files' | 'videos' | 'audios',
-      true
     >;
-    Product_Images: Attribute.Media<
-      'images' | 'files' | 'videos' | 'audios',
-      true
-    > &
-      Attribute.Required;
-    Product_MRP: Attribute.Integer & Attribute.Required;
-    Product_Name: Attribute.String & Attribute.Required;
+    Product_Description: Attribute.Text;
+    Product_DiscountedPrice: Attribute.Integer;
+    Product_FeaturesImage: Attribute.Media<'images', true>;
+    Product_Images: Attribute.Media<'images', true>;
+    Product_MRP: Attribute.Integer;
     Product_Published: Attribute.Boolean & Attribute.DefaultTo<true>;
+    Product_Rating: Attribute.Integer &
+      Attribute.SetMinMax<
+        {
+          max: 5;
+          min: 0;
+        },
+        number
+      > &
+      Attribute.DefaultTo<0>;
+    Product_Stock: Attribute.Integer;
     Product_Subcategory: Attribute.Enumeration<
       [
         'Smartphones & Accessories',
@@ -469,6 +470,8 @@ export interface ApiProductProduct extends Schema.CollectionType {
         'Seasonal Specials (Festive D\u00E9cor, Winterwear, etc.)'
       ]
     >;
+    Product_Title: Attribute.String;
+    Product_Video: Attribute.Media<'videos', true>;
     Prouduct_DiscountPercentage: Attribute.Integer;
     publishedAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;

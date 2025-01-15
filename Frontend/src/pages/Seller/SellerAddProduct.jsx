@@ -5,98 +5,103 @@ import { useNavigate } from 'react-router-dom';
 
 const SellerAddProduct = () => {
   const token = localStorage.getItem('token');
-  const difficulties = ["Beginner", "Intermediate", "Advanced"];
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     Product_Title: "",
     Product_Description: "",
-    Product_Subject: "",
-    Product_VR_link: "",
-    Product_Duration: "",
-    Product_Activity: false,
-    Product_Difficulty: "Beginner",
-    Product_trailer: null, // for file
-    Product_Notes: null,
-    Product_Thumbnail: null, // for file
+    Product_MRP: "",
+    Product_DiscountedPrice: "",
+    Product_DiscountedPercentage: "",
+    Product_Stock: "",
+    Product_Category: "",
+    Product_Subcategory: "",
+    Product_Image: null,
+    Product_FeaturesImage: null,
+    Product_Video: null,
   });
-
-  // Handle input changes
-  const handleInputChange = (e) => {
-    const { name, value, type, checked, files } = e.target;
-
-    if (type === "file" && files[0]) {
-      const { name: fileName, size, type: fileType } = files[0];
-
-      // Validate file type (optional)
-      const allowedFileTypes = ["application/pdf", "video/mp4", "image/jpg", "image/jpeg", "image/png"];
-      if (!allowedFileTypes.includes(fileType)) {
-        return console.error("Invalid file type selected.");
-      }
-    }
-
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: type === "checkbox" ? checked : type === "file" ? files[0] : value,
-    }));
-  };
-
-
-
-  const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB limit
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const { Product_trailer, Product_Notes, Product_Thumbnail } = formData;
+    const {
+      Product_Title,
+      Product_Description,
+      Product_MRP,
+      Product_DiscountedPrice,
+      Product_DiscountedPercentage,
+      Product_Stock,
+      Product_Category,
+      Product_Subcategory,
+      Product_Image,
+      Product_FeaturesImage,
+      Product_Video
+    } = formData;
 
-    // Validate file sizes
-    if (Product_trailer && Product_trailer.size > MAX_FILE_SIZE) {
-      return toast.error("Product trailer file is too large.");
+    if (!Product_Title || !Product_Description || !Product_MRP || !Product_Stock) {
+      return toast.error("Please fill in all required fields.");
     }
-    if (Product_Notes && Product_Notes.size > MAX_FILE_SIZE) {
-      return toast.error("Product notes file is too large.");
-    }
-    if (Product_Thumbnail && Product_Thumbnail.size > MAX_FILE_SIZE) {
-      return toast.error("Product thumbnail file is too large.");
-    }
-
-    // Prepare Product data
-    const ProductData = {
-      Product_Title: formData.Product_Title,
-      Product_Description: formData.Product_Description,
-      Product_Subject: formData.Product_Subject,
-      Product_VR_link: formData.Product_VR_link,
-      Product_Duration: formData.Product_Duration,
-      Product_Activity: formData.Product_Activity,
-      Product_Difficulty: formData.Product_Difficulty,
-    };
 
     try {
       if (!token) throw new Error("Unauthorized. Please log in again.");
 
-      // Submit Product data
-      const response = await fetch('http://localhost:1337/api/create-Products', {
+      const productData = {
+        Product_Title,
+        Product_Description,
+        Product_MRP,
+        Product_DiscountedPercentage,
+        Product_DiscountedPrice: Product_DiscountedPrice || null,
+        Product_Stock,
+        Product_Category,
+        Product_Subcategory,
+      };
+
+      console.log("Submitting product data:", productData);
+
+      const response = await fetch('http://localhost:1337/api/products', {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ data: ProductData }),
+        body: JSON.stringify({ data: productData }),
       });
 
       const result = await response.json();
-      if (!response.ok) throw new Error(result.message || "Failed to create Product.");
+      if (!response.ok) throw new Error(result.message || "Failed to create product.");
 
       const { id } = result.data;
 
-      // File Upload
       const formDataToUpload = new FormData();
-      if (Product_trailer) formDataToUpload.append("files", Product_trailer, Product_trailer.name);
-      if (Product_Notes) formDataToUpload.append("files", Product_Notes, Product_Notes.name);
-      if (Product_Thumbnail) formDataToUpload.append("files", Product_Thumbnail, Product_Thumbnail.name);
 
+      // Only append the file if it's defined
+      if (Product_Image) {
+        console.log("Appending Product_Image:", Product_Image.name);
+        formDataToUpload.append("files", Product_Image, Product_Image.name);
+      } else {
+        console.log("No Product_Image selected.");
+      }
+
+      if (Product_FeaturesImage) {
+        console.log("Appending Product_FeaturesImage:", Product_FeaturesImage.name);
+        formDataToUpload.append("files", Product_FeaturesImage, Product_FeaturesImage.name);
+      } else {
+        console.log("No Product_FeaturesImage selected.");
+      }
+
+      if (Product_Video) {
+        console.log("Appending Product_Video:", Product_Video.name);
+        formDataToUpload.append("files", Product_Video, Product_Video.name);
+      } else {
+        console.log("No Product_Video selected.");
+      }
+
+      // Debugging FormData entries
+      for (let [key, value] of formDataToUpload.entries()) {
+        console.log(`FormData entry: ${key} ->`, value);
+      }
+
+      // Proceed with file upload only if there are files to upload
       if (formDataToUpload.has("files")) {
-        console.log("Starting file upload...");
         const uploadResponse = await fetch("http://localhost:1337/api/upload", {
           method: "POST",
           headers: { Authorization: `Bearer ${token}` },
@@ -104,43 +109,16 @@ const SellerAddProduct = () => {
         });
 
         const uploadedFiles = await uploadResponse.json();
-        if (!uploadedFiles || !Array.isArray(uploadedFiles)) throw new Error("Invalid upload response.");
+        console.log("Uploaded files:", uploadedFiles);
 
-        // Extract file references
-        const trailerMedia = Product_trailer
-          ? uploadedFiles.find(file => file.name === Product_trailer.name)
-          : null;
-        const notesMedia = Product_Notes
-          ? uploadedFiles.find(file => file.name === Product_Notes.name)
-          : null;
-        const thumbnailMedia = Product_Thumbnail
-          ? uploadedFiles.find(file => file.name === Product_Thumbnail.name)
-          : null;
-
-        // Update Product with media
-        const updatePayload = {
-          data: {
-            Product_trailer: trailerMedia?.id || null,
-            Product_Notes: notesMedia?.id || null,
-            Product_Thumbnail: thumbnailMedia?.id || null,
-          },
-        };
-
-        const updateResponse = await fetch(`http://localhost:1337/api/create-Products/${id}`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(updatePayload),
-        });
-
-        const updateResult = await updateResponse.json();
-        if (!updateResponse.ok) throw new Error(updateResult.message || "Failed to update Product.");
+        if (!Array.isArray(uploadedFiles)) throw new Error("File upload failed.");
+      } else {
+        console.log("No files to upload.");
       }
 
-      toast.success("Product created and media uploaded successfully!");
-      navigate("/ProductsAdmin");
+
+      toast.success("Product created successfully!");
+      navigate("/SProducts");
     } catch (error) {
       console.error("Error:", error.message);
       toast.error(`An error occurred: ${error.message}`);
@@ -154,6 +132,24 @@ const SellerAddProduct = () => {
       Product_Subcategory: "", // Reset subcategory when category changes
     }));
   };
+
+  const handleInputChange = (e) => {
+    const { name, value, files } = e.target;
+    if (files && files[0]) {
+      console.log("File input detected:", name, files[0]);
+      setFormData((prevState) => ({
+        ...prevState,
+        [name]: files[0],
+      }));
+    } else {
+      setFormData((prevState) => ({
+        ...prevState,
+        [name]: value,
+      }));
+    }
+  };
+
+
 
 
   return (
@@ -250,7 +246,7 @@ const SellerAddProduct = () => {
 
         {/* Product Discounted Price */}
         <div>
-          <label className="block text-sm font-medium text-gray-700">Product MRP</label>
+          <label className="block text-sm font-medium text-gray-700">Discounted Price</label>
           <input
             type="Number"
             name="Product_DiscountedPrice"
@@ -263,7 +259,7 @@ const SellerAddProduct = () => {
 
         {/* Product Discounted Percentage */}
         <div>
-          <label className="block text-sm font-medium text-gray-700">Product MRP</label>
+          <label className="block text-sm font-medium text-gray-700">Discounted Percentage</label>
           <input
             type="Number"
             name="Product_DiscountedPercentage"
@@ -275,30 +271,47 @@ const SellerAddProduct = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700">Product Images</label>
+          <label className="block text-sm font-medium text-gray-700">Product Stock</label>
           <input
-            type="file"
-            name="Product_Images"
-            onChange={(e) => {
-              console.log("Image File Selected:", e.target.files[0]?.name);
-              handleInputChange(e);
-            }}
-            className="mt-1 block w-full p-2 border rounded-md shadow-sm"
+            type="Number"
+            name="Product_Stock"
+            value={formData.Product_Stock}
+            onChange={handleInputChange}
+            className="mt-1 block w-full p-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+            placeholder="Enter the number of Stock Available"
           />
         </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700">Product Features Image</label>
-          <input
-            type="file"
-            name="Product_FeaturesImage"
-            onChange={(e) => {
-              console.log("Image File Selected:", e.target.files[0]?.name);
-              handleInputChange(e);
-            }}
-            className="mt-1 block w-full p-2 border rounded-md shadow-sm"
-          />
-        </div>
+        <input
+          type="file"
+          name="Product_Image"  // Updated name to match state key
+          onChange={(e) => {
+            console.log("Image File Selected:", e.target.files[0]?.name);
+            handleInputChange(e);
+          }}
+          className="mt-1 block w-full p-2 border rounded-md shadow-sm"
+        />
+
+        <input
+          type="file"
+          name="Product_FeaturesImage"
+          onChange={(e) => {
+            console.log("Image File Selected:", e.target.files[0]?.name);
+            handleInputChange(e);
+          }}
+          className="mt-1 block w-full p-2 border rounded-md shadow-sm"
+        />
+
+        <input
+          type="file"
+          name="Product_Video"  // Updated name to match state key
+          onChange={(e) => {
+            console.log("Video File Selected:", e.target.files[0]?.name);
+            handleInputChange(e);
+          }}
+          className="mt-1 block w-full p-2 border rounded-md shadow-sm"
+        />
+
 
 
         {/* Submit Button */}
