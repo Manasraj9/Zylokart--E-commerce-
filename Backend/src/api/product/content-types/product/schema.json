@@ -12,16 +12,16 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "Product_Name": {
+    "Product_Title": {
       "type": "string",
-      "required": true
+      "required": false
     },
     "Product_Description": {
       "type": "text",
-      "required": true
+      "required": false
     },
     "Product_MRP": {
-      "required": true,
+      "required": false,
       "type": "integer"
     },
     "Product_DiscountedPrice": {
@@ -39,12 +39,9 @@
     "Product_Images": {
       "type": "media",
       "multiple": true,
-      "required": true,
+      "required": false,
       "allowedTypes": [
-        "images",
-        "files",
-        "videos",
-        "audios"
+        "images"
       ]
     },
     "Product_FeaturesImage": {
@@ -52,10 +49,7 @@
       "multiple": true,
       "required": false,
       "allowedTypes": [
-        "images",
-        "files",
-        "videos",
-        "audios"
+        "images"
       ]
     },
     "Product_Category": {
@@ -73,7 +67,7 @@
         "Industrial and Professional Supplies",
         "Others"
       ],
-      "required": true
+      "required": false
     },
     "Product_Subcategory": {
       "type": "enumeration",
@@ -133,6 +127,23 @@
         "Subscription Services",
         "Seasonal Specials (Festive Décor, Winterwear, etc.)"
       ]
+    },
+    "Product_Video": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": [
+        "videos"
+      ]
+    },
+    "Product_Rating": {
+      "type": "integer",
+      "default": 0,
+      "max": 5,
+      "min": 0
+    },
+    "Product_Stock": {
+      "type": "integer"
     }
   }
 }
