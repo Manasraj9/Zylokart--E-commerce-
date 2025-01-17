@@ -401,7 +401,6 @@ export interface ApiProductProduct extends Schema.CollectionType {
     Product_FeaturesImage: Attribute.Media<'images', true>;
     Product_Images: Attribute.Media<'images', true>;
     Product_MRP: Attribute.Integer;
-    Product_Published: Attribute.Boolean & Attribute.DefaultTo<true>;
     Product_Rating: Attribute.Integer &
       Attribute.SetMinMax<
         {
@@ -411,6 +410,7 @@ export interface ApiProductProduct extends Schema.CollectionType {
         number
       > &
       Attribute.DefaultTo<0>;
+    Product_State: Attribute.Boolean & Attribute.DefaultTo<true>;
     Product_Stock: Attribute.Integer;
     Product_Subcategory: Attribute.Enumeration<
       [

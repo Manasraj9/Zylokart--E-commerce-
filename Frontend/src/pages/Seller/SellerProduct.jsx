@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, Link } from 'react-router-dom';
 import Navbar from '../../components/Navbars/SellerNavbar'
 import { toast } from 'react-toastify';
 import { Dashboard, Message, Settings, Help, AccountBalance, AutoStories, StarBorderPurple500, ManageAccounts } from '@mui/icons-material';
 import { Box, List, ListItem, ListItemIcon, ListItemText, Divider, } from '@mui/material';
-import { Card, CardContent, Typography, Button, Dialog, DialogActions,CardActions, DialogContent, Switch, FormControlLabel, DialogTitle, } from '@mui/material';
+import { Card, CardContent, Typography, Button, Dialog, DialogActions, TextField, CardActions, DialogContent, Switch, FormControlLabel, DialogTitle, } from '@mui/material';
 import axios from 'axios';
 
 const SellerProduct = () => {
@@ -21,7 +21,6 @@ const SellerProduct = () => {
 
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [productDetails, setProductDetails] = useState({});
-    const [newImages, setNewImages] = useState([]); // Store product images
     const [productUpdates, setProductUpdates] = useState([]); // Store the updated product list
     const [isLoading, setIsLoading] = useState(false);
     const [open, setOpen] = useState(false);
@@ -35,40 +34,26 @@ const SellerProduct = () => {
         description: '',
         category: '',
         stock: '',
-        images: [],
-        video: null,
+        discountedPrice: '',
+        discountPercentage: '',
     });
 
     const handlePublishToggle = async (productId, currentState) => {
-        const newState = currentState === "Available" ? "Unavailable" : "Available"; // Toggle logic
+        const newState = currentState === true ? false : true; // Toggle logic for boolean
 
         try {
             const response = await axios.put(`http://localhost:1337/api/products/${productId}`, {
                 data: {
-                    Product_State: newState,  // Update the product state
+                    Product_State: newState, // Update the state with boolean values
                 },
             });
 
             console.log("Product state updated:", response.data);
-            toast.success(`Product ${newState} successfully!`);
+            toast.success(`Product state updated to ${newState ? "Published" : "Draft"} successfully!`);
             fetchProducts(); // Refresh the product list after updating the state
         } catch (error) {
             console.error("Error updating product state:", error);
             toast.error("Failed to update product state.");
-        }
-    };
-
-    // Handle file upload (images and video)
-    const handleFileUpload = async (file) => {
-        const formData = new FormData();
-        formData.append('files', file);
-
-        try {
-            const uploadResponse = await axios.post(`${API_URL.replace('/products', '')}/upload`, formData);
-            return uploadResponse.data[0]; // Return the uploaded file object
-        } catch (error) {
-            console.error("Error uploading file:", error);
-            return null;
         }
     };
 
@@ -79,7 +64,7 @@ const SellerProduct = () => {
 
     const handleDeleteProduct = async (productId) => {
         try {
-            await axios.delete(`http://localhost:1337/api/create-products/${productId}`);
+            await axios.delete(`http://localhost:1337/api/products/${productId}`);
             fetchProducts(); // Refresh the product list
             toast.success("Product deleted successfully!");
         } catch (error) {
@@ -107,19 +92,19 @@ const SellerProduct = () => {
             setProductDetails({
                 id: productData.id,
                 name: productData.attributes.Product_Title || '',
-                price: productData.attributes.Product_Price || '',
-                description: productData.attributes.Product_Description || '',
-                category: productData.attributes.Product_Category || '',
+                price: productData.attributes.Product_MRP || '',
                 stock: productData.attributes.Product_Stock || '',
+                discountedPrice: productData.attributes.Product_DiscountedPrice || '',
+                discountPercentage: productData.attributes.Prouduct_DiscountPercentage || '',
             });
 
             // Set the original product details for comparison
             setOriginalProductDetails({
                 name: productData.attributes.Product_Title || '',
-                price: productData.attributes.Product_Price || '',
-                description: productData.attributes.Product_Description || '',
-                category: productData.attributes.Product_Category || '',
+                price: productData.attributes.Product_MRP || '',
                 stock: productData.attributes.Product_Stock || '',
+                discountedPrice: productData.attributes.Product_DiscountedPrice || '',
+                discountPercentage: productData.attributes.Prouduct_DiscountPercentage || '',
             });
 
             setIsLoading(false); // Stop loading
@@ -132,38 +117,48 @@ const SellerProduct = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+    
         const dataToSend = {
-            title: productDetails.name || originalProductDetails.name,
-            price: productDetails.price || originalProductDetails.price,
-            description: productDetails.description || originalProductDetails.description,
-            category: productDetails.category || originalProductDetails.category,
-            stock: productDetails.stock || originalProductDetails.stock,
+            Product_Title: productDetails.name || originalProductDetails.name,
+            Product_MRP: Number(productDetails.price) || Number(originalProductDetails.price),
+            Product_Stock: Number(productDetails.stock) || Number(originalProductDetails.stock),
+            Product_DiscountedPrice: Number(productDetails.discountedPrice) || Number(originalProductDetails.discountedPrice),
+            Product_DiscountPercentage: Number(productDetails.discountPercentage) || Number(originalProductDetails.discountPercentage),
         };
-
+    
         console.log("Data to send:", dataToSend);
-
+    
+        // Check the payload structure before sending the request
+        console.log("Sending PUT request to:", `http://localhost:1337/api/products/${selectedProduct.id}`);
+        console.log("Payload being sent:", { data: dataToSend });
+    
         try {
             const response = await axios.put(
-                `http://localhost:1337/api/create-products/${productDetails.id}`,
-                { data: dataToSend },
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                }
+                `http://localhost:1337/api/products/${selectedProduct.id}`,
+                { data: dataToSend } // Wrap the data in a 'data' field
             );
-
-            console.log('Product updated successfully:', response.data);
+    
+    
             toast.success("Product updated successfully!");
-
-            // Refresh the product list or re-fetch product details after successful update
             fetchProducts(); // Re-fetch products to see the updated data
+            window.location.reload(); // Reload the page
         } catch (error) {
-            console.error('Error:', error);
+            // Add more detailed error logging
+            if (error.response) {
+                console.error('Error response:', error.response);
+                console.error('Error response status:', error.response.status);
+                console.error('Error response data:', error.response.data);
+            } else if (error.request) {
+                console.error('No response received:', error.request);
+            } else {
+                console.error('Error message:', error.message);
+            }
             toast.error('Failed to update product.');
         }
     };
+    
+    
+
 
     // Dialog to confirm product deletion
     const handleClickOpen = (product) => {
@@ -174,15 +169,9 @@ const SellerProduct = () => {
     const fetchProducts = async () => {
         setIsLoading(true);
         try {
-            const response = await axios.get('http://localhost:1337/api/products', {
-                params: {
-                    populate: ['Product_Images', 'Product_Video'],
-                },
-            });
-
-            const products = response.data.data || []; // Ensure the products variable is an array
-
-            setProductUpdates(products); // Update the product list
+            const response = await axios.get('http://localhost:1337/api/products');
+            console.log("Fetched products:", response.data);
+            setProductUpdates(response.data.data); // Update the product list
         } catch (error) {
             console.error('Error fetching products:', error);
             toast.error('Failed to fetch products.');
@@ -190,6 +179,7 @@ const SellerProduct = () => {
             setIsLoading(false);
         }
     };
+    
 
     useEffect(() => {
         fetchProducts();  // Fetch products when the component mounts
@@ -237,7 +227,7 @@ const SellerProduct = () => {
                     <Divider />
                 </Box>
                 <div className="flex-grow p-4">
-                    <Typography variant="h2" sx={{ marginTop: '20px' }}>Product Listings</Typography>
+                    <Typography variant="h4" sx={{ marginTop: '20px' }} className='underline'>Product Listings</Typography>
                     <div className="flex flex-wrap gap-5 ml-5 mt-10 justify-center">
                         {Array.isArray(productUpdates) && productUpdates.length > 0 ? (
                             productUpdates.map((product) => (
@@ -248,19 +238,61 @@ const SellerProduct = () => {
                                             {product.attributes.Product_Description}
                                         </Typography>
                                         <Typography variant="body2" color="text.secondary">
-                                            ${product.attributes.Product_Price}
+                                            MRP: {product.attributes.Product_MRP}
                                         </Typography>
+                                        <Typography variant="body2" color="text.secondary">
+                                            Stock: {product.attributes.Product_Stock}
+                                        </Typography>
+                                        <Typography variant="body2" color="text.secondary">
+                                            Discount Percentage: {product.attributes.Prouduct_DiscountPercentage}
+                                        </Typography>
+                                        <FormControlLabel
+                                            control={
+                                                <Switch
+                                                    checked={product.attributes.Product_State} // Check if the product is published (boolean)
+                                                    onChange={() => handlePublishToggle(product.id, product.attributes.Product_State)} // Pass the product ID and current state
+                                                    color="success"
+                                                    name="publishSwitch"
+                                                    inputProps={{ 'aria-label': 'publish-unpublish toggle' }}
+                                                />
+                                            }
+                                            label={product.attributes.Product_State ? "Published" : "Draft"} // Display the correct label based on boolean value
+                                        />
+
+                                        <div className="flex justify-between items-center mt-3">
+                                            {/* EDIT BUTTON */}
+                                            <button
+                                                onClick={() => handleEdit(product)}  // Correct function for Edit
+                                                className="px-4 py-2 bg-[#3f72af] text-white rounded-md shadow hover:bg-white hover:text-[#3f72af]"
+                                            >
+                                                EDIT
+                                            </button>
+
+                                            {/* DETAILS BUTTON */}
+                                            <Link to={`/details/${product.id}`}>
+                                                <Button
+                                                    className="px-4 py-2 rounded-md shadow text-2xl hover:bg-white hover:text-[#3f72af]"
+                                                    sx={{
+                                                        backgroundColor: '#3f72af',
+                                                        color: 'white',
+                                                    }}
+                                                >
+                                                    DETAILS
+                                                </Button>
+                                            </Link>
+
+                                            {/* DELETE BUTTON */}
+                                            <button
+                                                onClick={(e) => {
+                                                    e.stopPropagation(); // Prevents the click from propagating to parent elements
+                                                    handleClickOpen(product); // Open the Delete confirmation dialog
+                                                }}
+                                                className="px-4 py-2 bg-red-500 text-white hover:bg-white hover:text-red-500 rounded-md shadow"
+                                            >
+                                                DELETE
+                                            </button>
+                                        </div>
                                     </CardContent>
-                                    <CardActions>
-                                        <Button size="small" onClick={() => handleEdit(product)}>Edit</Button>
-                                        <Button size="small" onClick={() => handleClickOpen(product)}>Delete</Button>
-                                        <Button
-                                            size="small"
-                                            onClick={() => handlePublishToggle(product.id, product.attributes.Product_State)}
-                                        >
-                                            {product.attributes.Product_State === 'Available' ? 'Unpublish' : 'Publish'}
-                                        </Button>
-                                    </CardActions>
                                 </Card>
                             ))
                         ) : (
@@ -269,6 +301,54 @@ const SellerProduct = () => {
                             </Typography>
                         )}
                     </div>
+
+                    <Dialog open={Boolean(selectedProduct)} onClose={() => setSelectedProduct(null)}>
+                        <DialogTitle className='text-3xl'>Edit Course</DialogTitle>
+                        <div>
+                            <DialogContent className='p-4 flex flex-wrap gap-2.5'>
+                                <TextField
+                                    label="Product Name"
+                                    value={productDetails.name || ''}
+                                    onChange={(e) => setCourseDetails({ ...productDetails, name: e.target.value })}
+                                    fullWidth
+                                />
+                                <TextField
+                                    label="Product Price"
+                                    type="number" // For numeric input
+                                    value={productDetails.price || ''}
+                                    onChange={(e) => setProductDetails({ ...productDetails, price: e.target.value })}
+                                    fullWidth
+                                />
+
+                                <TextField
+                                    label="Discounted Price"
+                                    type="number" // For numeric input
+                                    value={productDetails.discountedPrice || ''}
+                                    onChange={(e) => setProductDetails({ ...productDetails, discountedPrice: e.target.value })}
+                                    fullWidth
+                                />
+
+                                <TextField
+                                    label="Discount Percentage"
+                                    type="number" // For numeric input
+                                    value={productDetails.discountPercentage || ''}
+                                    onChange={(e) => setProductDetails({ ...productDetails, discountPercentage: e.target.value })}
+                                    fullWidth
+                                />
+                                <TextField
+                                    label="Stock"
+                                    type="number" // For numeric input
+                                    value={productDetails.stock || ''}
+                                    onChange={(e) => setProductDetails({ ...productDetails, stock: e.target.value })}
+                                    fullWidth
+                                />
+                            </DialogContent>
+                        </div>
+                        <DialogActions>
+                            <Button onClick={handleClose} color="primary">Cancel</Button>
+                            <Button onClick={handleSubmit} color="primary">Save</Button>
+                        </DialogActions>
+                    </Dialog>
 
                     <Dialog
                         open={open}

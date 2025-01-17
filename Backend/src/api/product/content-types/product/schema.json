@@ -32,7 +32,7 @@
       "type": "integer",
       "required": false
     },
-    "Product_Published": {
+    "Product_State": {
       "type": "boolean",
       "default": true
     },
