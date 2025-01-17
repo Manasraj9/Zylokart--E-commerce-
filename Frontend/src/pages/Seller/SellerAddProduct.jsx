@@ -11,7 +11,7 @@ const SellerAddProduct = () => {
     Product_Description: "",
     Product_MRP: "",
     Product_DiscountedPrice: "",
-    Product_DiscountedPercentage: "",
+    Product_DiscountPercentage: "",
     Product_Stock: "",
     Product_Category: "",
     Product_Subcategory: "",
@@ -28,7 +28,7 @@ const SellerAddProduct = () => {
       Product_Description,
       Product_MRP,
       Product_DiscountedPrice,
-      Product_DiscountedPercentage,
+      Product_DiscountPercentage,
       Product_Stock,
       Product_Category,
       Product_Subcategory,
@@ -48,7 +48,7 @@ const SellerAddProduct = () => {
         Product_Title,
         Product_Description,
         Product_MRP,
-        Product_DiscountedPercentage,
+        Product_DiscountPercentage,
         Product_DiscountedPrice: Product_DiscountedPrice || null,
         Product_Stock,
         Product_Category,
@@ -263,7 +263,7 @@ const SellerAddProduct = () => {
           <input
             type="Number"
             name="Product_DiscountedPercentage"
-            value={formData.Product_DiscountedPercentage}
+            value={formData.Product_DiscountPercentage}
             onChange={handleInputChange}
             className="mt-1 block w-full p-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
             placeholder="Enter Discounted Percentage"
