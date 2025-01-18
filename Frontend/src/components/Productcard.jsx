@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-
 const ProductCard = () => {
   // Sample banner data - in real app, this would come from props or API
   const banners = [
@@ -65,7 +64,7 @@ const ProductCard = () => {
   };
 
   return (
-    <div className="bg-gray-900 py-6">
+    <div className="bg-gray-200 py-6">
       <div className="max-w-[1250px] mx-auto relative group">
         {/* Main Banner */}
         <div className="relative h-[300px] overflow-hidden rounded-lg shadow-xl">
