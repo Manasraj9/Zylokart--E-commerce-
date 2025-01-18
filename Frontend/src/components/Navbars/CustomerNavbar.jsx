@@ -31,12 +31,12 @@ const CustomerNavbar = () => {
                         </li>
                         <li>
                             <Link to="/Wishlist">
-                                <FaHeart className='text-4xl' />
+                                <FaHeart className='text-4xl'/>
                             </Link>
                         </li>
                         <li>
                             <Link to="/cart">
-                                <FaShoppingCart className='text-4xl' />
+                                <FaShoppingCart className='text-4xl'/>
                             </Link>
                         </li>
                         <li>
