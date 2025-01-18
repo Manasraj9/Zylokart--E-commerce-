@@ -79,7 +79,7 @@ const Login = () => {
             <Navbar />
             <div className='flex justify-center'>
                 <div>
-                    <img src="/images/Login.svg" alt="page for Login" className="w-[780px] h-[650px] bg-white" />
+                    <img src="src/images/Login.jpg" alt="page for Login" className="w-[780px] h-[650px] bg-white" />
                 </div>
                 <div className="w-[750px] bg-[#dbe2ef]">
                     <h1 className='text-6xl text-[#112d4e] text-center mt-[100px]'>Login</h1>

@@ -89,22 +89,22 @@ const Signup = () => {
     <div>
       <Navbar />
       <div className='flex'>
-                <div className='bg-white flex justify-center'>
-                    <img src="/images/Login.svg" alt="page for Register" className="w-[780px] h-[650px]" />
+                <div className='bg-black flex justify-center'>
+                    <img src="src/images/Signup.jpg" alt="page for Register" className="w-[780px] h-[650px]" />
                 </div>
                 <div className='w-[750px] bg-[#dbe2ef] text-[#112d4e]'>
                     <div className='flex justify-center pt-8'>
                         <div
                             onClick={() => handleOptionChange('Customer')}
-                            className={`h-10 px-3 py-[7px] ${selectedOption === 'Customer' ? 'bg-white' : 'bg-[#dbe2ef]'} cursor-pointer justify-center items-center gap-2.5 inline-flex`}
+                            className={`h-10 px-3 py-[7px] ${selectedOption === 'Customer' ? 'bg-blue-600' : 'bg-[#dbe2ef]'} cursor-pointer justify-center items-center gap-2.5 inline-flex`}
                         >
-                            <div className={`text-base font-semibold font-['Epilogue'] leading-relaxed ${selectedOption === 'Customer' ? 'text-[#3f72af]' : 'text-gray-500'}`}>Customer</div>
+                            <div className={`text-base font-semibold font-['Epilogue'] leading-relaxed ${selectedOption === 'Customer' ? 'text-white' : 'text-gray-500'}`}>Customer</div>
                         </div>
                         <div
                             onClick={() => handleOptionChange('Seller')}
-                            className={`h-10 px-3 py-[7px] ${selectedOption === 'Seller' ? 'bg-white' : 'bg-[#dbe2ef]'} cursor-pointer justify-center items-center gap-2.5 inline-flex`}
+                            className={`h-10 px-3 py-[7px] ${selectedOption === 'Seller' ? 'bg-blue-600' : 'bg-[#dbe2ef]'} cursor-pointer justify-center items-center gap-2.5 inline-flex`}
                         >
-                            <div className={`text-base font-semibold font-['Epilogue'] leading-relaxed ${selectedOption === 'Seller' ? 'text-[#3f72af]' : 'text-gray-500'}`}>Seller</div>
+                            <div className={`text-base font-semibold font-['Epilogue'] leading-relaxed ${selectedOption === 'Seller' ? 'text-white' : 'text-gray-500'}`}>Seller</div>
                         </div>
                     </div>
 
@@ -154,14 +154,14 @@ const Signup = () => {
 // Job Seeker Form Component
 const CustomerForm = ({ username, email, password, confirmPass, setUsername, setEmail, setPassword, setConfirmPass, handleRegister, error, success, showPassword, setShowPassword, showConfirmPassword, setShowConfirmPassword }) => {
   return (
-    <div className='w-[550px] text-white bg-transparent'>
+    <div className='w-[550px] text-black bg-transparent'>
       <h2 className="text-center text-5xl font-semibold mb-6">Register as Customer</h2>
       <form onSubmit={handleRegister}>
         <p className='pb-1'>Username</p>
         <input
           type="text"
           placeholder="Full Name"
-          className="w-full p-3 bg-transparent border-2 border-white text-white placeholder-[#B0BEC5] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white focus:text-gray-900 rounded-lg"
+          className="w-full p-3 bg-transparent border-2 border-blue-500 text-black placeholder-[#B0BEC5] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white focus:text-gray-900 rounded-lg"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
         />
@@ -169,8 +169,7 @@ const CustomerForm = ({ username, email, password, confirmPass, setUsername, set
         <input
           type="email"
           placeholder="Email Address"
-          className="w-full p-3 bg-transparent border-2 border-white text-white placeholder-[#B0BEC5] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white focus:text-gray-900 rounded-lg"
-          value={email}
+          className="w-full p-3 bg-transparent border-2 border-blue-500 text-black placeholder-[#B0BEC5] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white focus:text-gray-900 rounded-lg"          value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
         <p className='pb-1'>Enter password</p>
@@ -178,9 +177,7 @@ const CustomerForm = ({ username, email, password, confirmPass, setUsername, set
           <input
             type={showPassword ? 'text' : 'password'}
             placeholder="Password"
-            className="w-full p-3 bg-transparent border-2 border-white text-white placeholder-[#B0BEC5] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white focus:text-gray-900 rounded-lg"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            className="w-full p-3 bg-transparent border-2 border-blue-500 text-black placeholder-[#B0BEC5] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white focus:text-gray-900 rounded-lg"            onChange={(e) => setPassword(e.target.value)}
           />
           <span
             onClick={() => setShowPassword(!showPassword)}
@@ -194,8 +191,7 @@ const CustomerForm = ({ username, email, password, confirmPass, setUsername, set
           <input
             type={showConfirmPassword ? 'text' : 'password'}
             placeholder="Enter Password Again"
-            className="w-full p-3 bg-transparent border-2 border-white text-white placeholder-[#B0BEC5] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-[#F8F9FA] focus:text-gray-900 rounded-lg"
-            value={confirmPass}
+            className="w-full p-3 bg-transparent border-2 border-blue-500 text-black placeholder-[#B0BEC5] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white focus:text-gray-900 rounded-lg"            value={confirmPass}
             onChange={(e) => setConfirmPass(e.target.value)}
           />
           <span
@@ -212,7 +208,7 @@ const CustomerForm = ({ username, email, password, confirmPass, setUsername, set
         {success && <p className="text-green-500">{success}</p>}
       </form>
       <div className="mt-2 flex">
-        <p className="text-base text-white">Already Have an Account?</p>
+        <p className="text-base text-black">Already Have an Account?</p>
         <Link to="/Login">
           <p className="text-blue-400 hover:underline pl-[4px]">Login</p>
         </Link>
@@ -223,14 +219,14 @@ const CustomerForm = ({ username, email, password, confirmPass, setUsername, set
 // Company Form Component
 const SellerForm = ({ username, email, password, confirmPass, setUsername, setEmail, setPassword, setConfirmPass, handleRegister, error, success, showPassword, setShowPassword, showConfirmPassword, setShowConfirmPassword }) => {
   return (
-    <div className='w-[550px] text-white'>
+    <div className='w-[550px] text-black'>
       <h2 className="text-center text-5xl font-semibold mb-6">Register as Seller</h2>
       <form onSubmit={handleRegister}>
         <p className='pb-1'>Username</p>
         <input
           type="text"
           placeholder="Full Name"
-          className="w-full p-3 bg-transparent border-2 border-white text-white placeholder-[#B0BEC5] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white focus:text-gray-900 rounded-lg"
+          className="w-full p-3 bg-transparent border-2 border-blue-500 text-black placeholder-[#B0BEC5] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white focus:text-gray-900 rounded-lg"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
         />
@@ -238,7 +234,7 @@ const SellerForm = ({ username, email, password, confirmPass, setUsername, setEm
         <input
           type="email"
           placeholder="Email Address"
-          className="w-full p-3 bg-transparent border-2 border-white text-white placeholder-[#B0BEC5] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-[#F8F9FA] focus:text-gray-900 rounded-lg"
+          className="w-full p-3 bg-transparent border-2 border-blue-500 text-black placeholder-[#B0BEC5] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white focus:text-gray-900 rounded-lg"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
@@ -247,7 +243,7 @@ const SellerForm = ({ username, email, password, confirmPass, setUsername, setEm
           <input
             type={showPassword ? 'text' : 'password'}
             placeholder="Password"
-            className="w-full p-3 bg-transparent border-2 border-white text-white placeholder-[#B0BEC5] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-[#F8F9FA] focus:text-gray-900 rounded-lg"
+            className="w-full p-3 bg-transparent border-2 border-blue-500 text-black placeholder-[#B0BEC5] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white focus:text-gray-900 rounded-lg"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
@@ -263,7 +259,7 @@ const SellerForm = ({ username, email, password, confirmPass, setUsername, setEm
           <input
             type={showConfirmPassword ? 'text' : 'password'}
             placeholder="Enter Password Again"
-            className="w-full p-3 bg-transparent border-2 border-white text-white placeholder-[#B0BEC5] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-[#F8F9FA] focus:text-gray-900 rounded-lg"
+            className="w-full p-3 bg-transparent border-2 border-blue-500 text-black placeholder-[#B0BEC5] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white focus:text-gray-900 rounded-lg"
             value={confirmPass}
             onChange={(e) => setConfirmPass(e.target.value)}
           />

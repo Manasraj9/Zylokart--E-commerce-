@@ -27,7 +27,8 @@ const SellerProduct = () => {
     const API_URL = "http://localhost:1337/api/products"; // Update with your API endpoint for products
     const location = useLocation(); // Get the current route
     const navigate = useNavigate(); // Navigate programmatically
-    const [isPublished, setIsPublished] = useState(true); // Default state: Available
+    const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+    const [openEditDialog, setOpenEditDialog] = useState(false);
     const [originalProductDetails, setOriginalProductDetails] = useState({
         name: '',
         price: '',
@@ -55,11 +56,6 @@ const SellerProduct = () => {
             console.error("Error updating product state:", error);
             toast.error("Failed to update product state.");
         }
-    };
-
-    const handleClose = () => {
-        setOpen(false);
-        setSelectedProduct(null); // Close the deletion dialog
     };
 
     const handleDeleteProduct = async (productId) => {
@@ -117,7 +113,7 @@ const SellerProduct = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-    
+
         const dataToSend = {
             Product_Title: productDetails.name || originalProductDetails.name,
             Product_MRP: Number(productDetails.price) || Number(originalProductDetails.price),
@@ -125,20 +121,20 @@ const SellerProduct = () => {
             Product_DiscountedPrice: Number(productDetails.discountedPrice) || Number(originalProductDetails.discountedPrice),
             Product_DiscountPercentage: Number(productDetails.discountPercentage) || Number(originalProductDetails.discountPercentage),
         };
-    
+
         console.log("Data to send:", dataToSend);
-    
+
         // Check the payload structure before sending the request
         console.log("Sending PUT request to:", `http://localhost:1337/api/products/${selectedProduct.id}`);
         console.log("Payload being sent:", { data: dataToSend });
-    
+
         try {
             const response = await axios.put(
                 `http://localhost:1337/api/products/${selectedProduct.id}`,
                 { data: dataToSend } // Wrap the data in a 'data' field
             );
-    
-    
+
+
             toast.success("Product updated successfully!");
             fetchProducts(); // Re-fetch products to see the updated data
             window.location.reload(); // Reload the page
@@ -156,8 +152,21 @@ const SellerProduct = () => {
             toast.error('Failed to update product.');
         }
     };
-    
-    
+
+    const handleClickOpenDelete = (product) => {
+        setSelectedProduct(product);
+        setOpenDeleteDialog(true);  // Open the Delete confirmation dialog
+    };
+
+    const handleCloseDeleteDialog = () => {
+        setOpenDeleteDialog(false);
+        setSelectedProduct(null); // Reset selected product for delete
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+        setSelectedProduct(null); // Close the deletion dialog
+    };
 
 
     // Dialog to confirm product deletion
@@ -179,7 +188,7 @@ const SellerProduct = () => {
             setIsLoading(false);
         }
     };
-    
+
 
     useEffect(() => {
         fetchProducts();  // Fetch products when the component mounts
@@ -260,9 +269,23 @@ const SellerProduct = () => {
                                         />
 
                                         <div className="flex justify-between items-center mt-3">
+
+                                            {/* DELETE BUTTON */}
+                                            <button
+                                                onClick={(e) => {
+                                                    e.stopPropagation(); // Prevents the click from propagating to parent elements
+                                                    handleClickOpenDelete(product); // Open the Delete confirmation dialog
+                                                }}
+                                                className="px-4 py-2 bg-red-500 text-white hover:bg-white hover:text-red-500 rounded-md shadow"
+                                            >
+                                                DELETE
+                                            </button>
+
                                             {/* EDIT BUTTON */}
                                             <button
-                                                onClick={() => handleEdit(product)}  // Correct function for Edit
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleEdit(product)} } // Correct function for Edit
                                                 className="px-4 py-2 bg-[#3f72af] text-white rounded-md shadow hover:bg-white hover:text-[#3f72af]"
                                             >
                                                 EDIT
@@ -280,17 +303,8 @@ const SellerProduct = () => {
                                                     DETAILS
                                                 </Button>
                                             </Link>
+                                            
 
-                                            {/* DELETE BUTTON */}
-                                            <button
-                                                onClick={(e) => {
-                                                    e.stopPropagation(); // Prevents the click from propagating to parent elements
-                                                    handleClickOpen(product); // Open the Delete confirmation dialog
-                                                }}
-                                                className="px-4 py-2 bg-red-500 text-white hover:bg-white hover:text-red-500 rounded-md shadow"
-                                            >
-                                                DELETE
-                                            </button>
                                         </div>
                                     </CardContent>
                                 </Card>
@@ -350,24 +364,12 @@ const SellerProduct = () => {
                         </DialogActions>
                     </Dialog>
 
-                    <Dialog
-                        open={open}
-                        onClose={handleClose}
-                        aria-labelledby="alert-dialog-title"
-                        aria-describedby="alert-dialog-description"
-                    >
-                        <DialogTitle id="alert-dialog-title">Are you sure you want to delete this product?</DialogTitle>
+                    {/* Delete Confirmation Dialog */}
+                    <Dialog open={openDeleteDialog} onClose={handleCloseDeleteDialog}>
+                        <DialogTitle>Are you sure you want to delete this product?</DialogTitle>
                         <DialogActions>
-                            <Button onClick={handleClose} color="primary">Cancel</Button>
-                            <Button
-                                onClick={() => {
-                                    handleDeleteProduct(selectedProduct.id);
-                                    handleClose();
-                                }}
-                                color="primary"
-                            >
-                                Yes, Delete
-                            </Button>
+                            <Button onClick={handleCloseDeleteDialog} color="primary">Cancel</Button>
+                            <Button onClick={handleDeleteProduct} color="primary">Delete</Button>
                         </DialogActions>
                     </Dialog>
                 </div>
