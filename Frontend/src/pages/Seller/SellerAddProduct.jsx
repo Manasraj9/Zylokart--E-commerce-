@@ -32,7 +32,7 @@ const SellerAddProduct = () => {
       Product_Stock,
       Product_Category,
       Product_Subcategory,
-      Product_Image,
+      Product_Images,
       Product_FeaturesImage,
       Product_Video
     } = formData;
@@ -74,9 +74,9 @@ const SellerAddProduct = () => {
       const formDataToUpload = new FormData();
 
       // Only append the file if it's defined
-      if (Product_Image) {
-        console.log("Appending Product_Image:", Product_Image.name);
-        formDataToUpload.append("files", Product_Image, Product_Image.name);
+      if (Product_Images) {
+        console.log("Appending Product_Image:", Product_Images.name);
+        formDataToUpload.append("files", Product_Images, Product_Images.name);
       } else {
         console.log("No Product_Image selected.");
       }
@@ -112,12 +112,44 @@ const SellerAddProduct = () => {
         console.log("Uploaded files:", uploadedFiles);
 
         if (!Array.isArray(uploadedFiles)) throw new Error("File upload failed.");
-      } else {
-        console.log("No files to upload.");
+
+        // Map uploaded files to their IDs for product association
+        const imageMedia = Product_Images
+          ? uploadedFiles.find(file => file.name === Product_Images.name)
+          : null;
+        if (!imageMedia) {
+          throw new Error("Uploaded image not found in response.");
+        }
+        const featuresImageMedia = Product_FeaturesImage
+          ? uploadedFiles.find(file => file.name === Product_FeaturesImage.name)
+          : null;
+        const videoMedia = Product_Video
+          ? uploadedFiles.find(file => file.name === Product_Video.name)
+          : null;
+
+        // Update product with media references
+        const updatePayload = {
+          data: {
+            Product_Images: imageMedia?.id || null,
+            Product_FeaturesImage: featuresImageMedia?.id || null,
+            Product_Video: videoMedia?.id || null,
+          },
+        };
+
+        const updateResponse = await fetch(`http://localhost:1337/api/products/${id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(updatePayload),
+        });
+
+        const updateResult = await updateResponse.json();
+        if (!updateResponse.ok) throw new Error(updateResult.message || "Failed to update product.");
       }
 
-
-      toast.success("Product created successfully!");
+      toast.success("Product created and media uploaded successfully!");
       navigate("/SProducts");
     } catch (error) {
       console.error("Error:", error.message);
@@ -262,7 +294,7 @@ const SellerAddProduct = () => {
           <label className="block text-sm font-medium text-gray-700">Discounted Percentage</label>
           <input
             type="Number"
-            name="Product_DiscountedPercentage"
+            name="Product_DiscountPercentage"
             value={formData.Product_DiscountPercentage}
             onChange={handleInputChange}
             className="mt-1 block w-full p-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
@@ -282,35 +314,44 @@ const SellerAddProduct = () => {
           />
         </div>
 
-        <input
-          type="file"
-          name="Product_Image"  // Updated name to match state key
-          onChange={(e) => {
-            console.log("Image File Selected:", e.target.files[0]?.name);
-            handleInputChange(e);
-          }}
-          className="mt-1 block w-full p-2 border rounded-md shadow-sm"
-        />
+        <div>
+          <label className="block text-sm font-medium text-gray-700">Product Image</label>
+          <input
+            type="file"
+            name="Product_Images"  // Updated name to match state key
+            onChange={(e) => {
+              console.log("Image File Selected:", e.target.files[0]?.name);
+              handleInputChange(e);
+            }}
+            className="mt-1 block w-full p-2 border rounded-md shadow-sm"
+          />
+        </div>
 
-        <input
-          type="file"
-          name="Product_FeaturesImage"
-          onChange={(e) => {
-            console.log("Image File Selected:", e.target.files[0]?.name);
-            handleInputChange(e);
-          }}
-          className="mt-1 block w-full p-2 border rounded-md shadow-sm"
-        />
+        <div>
+          <label className="block text-sm font-medium text-gray-700">Product Featured Images</label>
+          <input
+            type="file"
+            name="Product_FeaturesImage"
+            onChange={(e) => {
+              console.log("Image File Selected:", e.target.files[0]?.name);
+              handleInputChange(e);
+            }}
+            className="mt-1 block w-full p-2 border rounded-md shadow-sm"
+          />
+        </div>
 
-        <input
-          type="file"
-          name="Product_Video"  // Updated name to match state key
-          onChange={(e) => {
-            console.log("Video File Selected:", e.target.files[0]?.name);
-            handleInputChange(e);
-          }}
-          className="mt-1 block w-full p-2 border rounded-md shadow-sm"
-        />
+        <div>
+          <label className="block text-sm font-medium text-gray-700">Product Video</label>
+          <input
+            type="file"
+            name="Product_Video"  // Updated name to match state key
+            onChange={(e) => {
+              console.log("Video File Selected:", e.target.files[0]?.name);
+              handleInputChange(e);
+            }}
+            className="mt-1 block w-full p-2 border rounded-md shadow-sm"
+          />
+        </div>
 
 
 

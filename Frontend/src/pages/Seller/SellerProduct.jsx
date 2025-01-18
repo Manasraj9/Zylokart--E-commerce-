@@ -58,11 +58,19 @@ const SellerProduct = () => {
         }
     };
 
-    const handleDeleteProduct = async (productId) => {
+    const handleDeleteProduct = async () => {
+        if (!selectedProduct) {
+            console.error("No product selected for deletion");
+            toast.error("No product selected for deletion.");
+            return;
+        }
+    
         try {
-            await axios.delete(`http://localhost:1337/api/products/${productId}`);
-            fetchProducts(); // Refresh the product list
+            console.log("Deleting product with ID:", selectedProduct.id); // Debugging
+            await axios.delete(`http://localhost:1337/api/products/${selectedProduct.id}`);
+            fetchProducts(); // Refresh product list after deletion
             toast.success("Product deleted successfully!");
+            handleCloseDeleteDialog(); // Close the dialog
         } catch (error) {
             console.error("Error deleting product:", error);
             toast.error("Failed to delete product.");
@@ -270,22 +278,20 @@ const SellerProduct = () => {
 
                                         <div className="flex justify-between items-center mt-3">
 
-                                            {/* DELETE BUTTON */}
                                             <button
-                                                onClick={(e) => {
-                                                    e.stopPropagation(); // Prevents the click from propagating to parent elements
-                                                    handleClickOpenDelete(product); // Open the Delete confirmation dialog
-                                                }}
+                                                onClick={() => handleClickOpenDelete(product)} // Pass the product to delete
                                                 className="px-4 py-2 bg-red-500 text-white hover:bg-white hover:text-red-500 rounded-md shadow"
                                             >
                                                 DELETE
                                             </button>
 
+
                                             {/* EDIT BUTTON */}
                                             <button
                                                 onClick={(e) => {
                                                     e.stopPropagation();
-                                                    handleEdit(product)} } // Correct function for Edit
+                                                    handleEdit(product)
+                                                }} // Correct function for Edit
                                                 className="px-4 py-2 bg-[#3f72af] text-white rounded-md shadow hover:bg-white hover:text-[#3f72af]"
                                             >
                                                 EDIT
@@ -303,7 +309,7 @@ const SellerProduct = () => {
                                                     DETAILS
                                                 </Button>
                                             </Link>
-                                            
+
 
                                         </div>
                                     </CardContent>
@@ -364,14 +370,16 @@ const SellerProduct = () => {
                         </DialogActions>
                     </Dialog>
 
-                    {/* Delete Confirmation Dialog */}
                     <Dialog open={openDeleteDialog} onClose={handleCloseDeleteDialog}>
-                        <DialogTitle>Are you sure you want to delete this product?</DialogTitle>
+                        <DialogTitle>
+                            Are you sure you want to delete the product "{selectedProduct?.Title}"?
+                        </DialogTitle>
                         <DialogActions>
                             <Button onClick={handleCloseDeleteDialog} color="primary">Cancel</Button>
                             <Button onClick={handleDeleteProduct} color="primary">Delete</Button>
                         </DialogActions>
                     </Dialog>
+
                 </div>
             </div>
         </div>
