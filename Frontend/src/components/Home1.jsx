@@ -1,6 +1,6 @@
 import React from 'react'
-
-
+import ProductCard from "./Productcard";
+import { Timer } from 'lucide-react';
 const Home1 = () => {
     const [searchQuery, setSearchQuery] = React.useState('');
     
@@ -28,7 +28,7 @@ const Home1 = () => {
         <div className="min-h-screen bg-gray-100">
             
             {/* Header */}
-            <header className="bg-[#28f039] text-white">
+            <header className="bg-[#1867b1] text-white">
                 <div className="max-w-7xl mx-auto px-4">
                     <div className="flex items-center h-16 gap-8">
 
@@ -48,9 +48,6 @@ const Home1 = () => {
 
                         {/* Navigation with Font Awesome Icons */}
                         <nav className="flex items-center gap-8">
-                            <button className="bg-white text-[#2874f0] px-8 py-1 font-medium">
-                                <i className="fas fa-user mr-2"></i>Login
-                            </button>
                             <a href="#" className="flex items-center gap-2 hover:text-gray-200">
                                 <i className="fas fa-shopping-cart"></i>
                                 Cart
@@ -85,15 +82,19 @@ const Home1 = () => {
                     </div>
                 </div>
             </div>
-
+            <ProductCard />
             {/* Deals Section */}
             <div className="max-w-7xl mx-auto px-4 py-8">
                 <div className="bg-white rounded shadow p-4">
                     <div className="flex justify-between items-center mb-6">
-                        <h2 className="text-2xl font-bold">
-                            <i className="fas fa-bolt text-yellow-500 mr-2"></i>
-                            Deals of the Day
-                        </h2>
+                        <div className="flex items-center gap-4">
+                        <i className="fas fa-bolt text-yellow-500 mr-2"></i>
+                            <h2 className="text-2xl font-bold">Deals of the Day</h2>
+                            <div className="flex items-center gap-2 text-red-500">
+                                <Timer className="w-5 h-5" />
+                                <span className="font-medium">22:10:32 Left</span>
+                            </div>
+                        </div>
                         <button className="bg-[#2874f0] text-white px-6 py-2 rounded">
                             VIEW ALL
                             <i className="fas fa-chevron-right ml-2"></i>
@@ -116,6 +117,24 @@ const Home1 = () => {
                             </div>
                         ))}
                     </div>
+                </div>
+            </div>
+            <div className="max-w-7xl mx-auto px-4 py-8">
+                <h2 className="text-2xl font-bold mb-6">Featured Brands</h2>
+                <div className="grid grid-cols-6 gap-4">
+                    {[1, 2, 3, 4, 5, 6].map((index) => (
+                        <div key={index} className="bg-white rounded-lg shadow-lg p-4 hover:shadow-xl transition-shadow cursor-pointer">
+                            <div className="aspect-square mb-4 overflow-hidden rounded-lg">
+                                <img
+                                    src={`/api/placeholder/150/150`}
+                                    alt={`Brand ${index}`}
+                                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                                />
+                            </div>
+                            <h3 className="font-medium text-center mb-1">Brand {index}</h3>
+                            <p className="text-green-600 text-sm text-center font-medium">Up to {20 + index * 5}% off</p>
+                        </div>
+                    ))}
                 </div>
             </div>
         </div>
