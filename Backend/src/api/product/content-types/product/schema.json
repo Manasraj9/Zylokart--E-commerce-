@@ -1,0 +1,149 @@
+{
+  "kind": "collectionType",
+  "collectionName": "products",
+  "info": {
+    "singularName": "product",
+    "pluralName": "products",
+    "displayName": "Products",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "Product_Title": {
+      "type": "string",
+      "required": false
+    },
+    "Product_Description": {
+      "type": "text",
+      "required": false
+    },
+    "Product_MRP": {
+      "required": false,
+      "type": "integer"
+    },
+    "Product_DiscountedPrice": {
+      "type": "integer",
+      "required": false
+    },
+    "Prouduct_DiscountPercentage": {
+      "type": "integer",
+      "required": false
+    },
+    "Product_State": {
+      "type": "boolean",
+      "default": true
+    },
+    "Product_Images": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "Product_FeaturesImage": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "Product_Category": {
+      "type": "enumeration",
+      "enum": [
+        "Electronics and Appliances",
+        "Fashion",
+        "Home and Furniture",
+        "Beauty and Personal Care",
+        "Grocery and Essentials",
+        "Sports, Books, and Hobbies",
+        "Automotive",
+        "Health and Wellness",
+        "Toys, Kids, and Baby Products",
+        "Industrial and Professional Supplies",
+        "Others"
+      ],
+      "required": false
+    },
+    "Product_Subcategory": {
+      "type": "enumeration",
+      "enum": [
+        "Smartphones & Accessories",
+        "Laptops & Computers",
+        "Televisions",
+        "Home Appliances",
+        "Cameras & Photography",
+        "Gaming Consoles & Accessories",
+        "Audio Devices ",
+        "Smart Home Devices",
+        "Men’s Clothing (T-shirts, Shirts, Jeans, etc.)",
+        "Women’s Clothing (Dresses, Tops, Sarees, etc.)",
+        "Kids Clothing",
+        "Footwear (Men, Women, Kids)",
+        "Accessories (Bags, Belts, Wallets)",
+        "Jewelry & Watches",
+        "Furniture (Sofas, Beds, Tables)",
+        "Home Décor (Wall Art, Clocks, etc.)",
+        "Kitchen & Dining (Cookware, Dinnerware)",
+        "Home Furnishing",
+        "Lighting & Lamps ",
+        "Makeup & Cosmetics",
+        "Skin Care (Moisturizers, Sunscreens)",
+        "Hair Care (Shampoos, Hair Oils)",
+        "Personal Hygiene (Soaps, Sanitizers, Razors)",
+        "Fragrances (Perfumes, Deodorants)",
+        "Fruits & Vegetables",
+        "Beverages (Coffee, Tea, Soft Drinks)",
+        "Snacks & Packaged Foods",
+        "Cooking Essentials (Spices, Oils, Grains)",
+        "Baby Products",
+        "Pet Supplies",
+        "Sports Equipment (Cricket Bats, Yoga Mats)",
+        "Fitness Gear (Gym Equipment, Activewear)",
+        "Books (Fiction, Non-Fiction, Academic)",
+        "Stationery (Notebooks, Pens)",
+        "Musical Instruments",
+        "Craft & Hobbies Supplies",
+        "Car Accessories (Seat Covers, Air Fresheners)",
+        "Bike Accessories",
+        "Automotive Tools",
+        "Tyres & Alloys",
+        "Vitamins & Supplements",
+        "Medical Equipment",
+        "First Aid Supplies",
+        "Fitness Equipment",
+        "Toys (Educational, Action Figures, Dolls)",
+        "Baby Care (Diapers, Feeding Bottles)",
+        "Kids Furniture & Accessories",
+        "Tools & Hardware",
+        "Safety Equipment",
+        "Office Supplies",
+        "Cleaning Supplies",
+        "Gift Cards",
+        "Subscription Services",
+        "Seasonal Specials (Festive Décor, Winterwear, etc.)"
+      ]
+    },
+    "Product_Video": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": [
+        "videos"
+      ]
+    },
+    "Product_Rating": {
+      "type": "integer",
+      "default": 0,
+      "max": 5,
+      "min": 0
+    },
+    "Product_Stock": {
+      "type": "integer"
+    }
+  }
+}

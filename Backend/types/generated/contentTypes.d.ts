@@ -362,6 +362,128 @@ export interface AdminUser extends Schema.CollectionType {
   };
 }
 
+export interface ApiProductProduct extends Schema.CollectionType {
+  collectionName: 'products';
+  info: {
+    description: '';
+    displayName: 'Products';
+    pluralName: 'products';
+    singularName: 'product';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::product.product',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    Product_Category: Attribute.Enumeration<
+      [
+        'Electronics and Appliances',
+        'Fashion',
+        'Home and Furniture',
+        'Beauty and Personal Care',
+        'Grocery and Essentials',
+        'Sports, Books, and Hobbies',
+        'Automotive',
+        'Health and Wellness',
+        'Toys, Kids, and Baby Products',
+        'Industrial and Professional Supplies',
+        'Others'
+      ]
+    >;
+    Product_Description: Attribute.Text;
+    Product_DiscountedPrice: Attribute.Integer;
+    Product_FeaturesImage: Attribute.Media<'images', true>;
+    Product_Images: Attribute.Media<'images', true>;
+    Product_MRP: Attribute.Integer;
+    Product_Rating: Attribute.Integer &
+      Attribute.SetMinMax<
+        {
+          max: 5;
+          min: 0;
+        },
+        number
+      > &
+      Attribute.DefaultTo<0>;
+    Product_State: Attribute.Boolean & Attribute.DefaultTo<true>;
+    Product_Stock: Attribute.Integer;
+    Product_Subcategory: Attribute.Enumeration<
+      [
+        'Smartphones & Accessories',
+        'Laptops & Computers',
+        'Televisions',
+        'Home Appliances',
+        'Cameras & Photography',
+        'Gaming Consoles & Accessories',
+        'Audio Devices ',
+        'Smart Home Devices',
+        'Men\u2019s Clothing (T-shirts, Shirts, Jeans, etc.)',
+        'Women\u2019s Clothing (Dresses, Tops, Sarees, etc.)',
+        'Kids Clothing',
+        'Footwear (Men, Women, Kids)',
+        'Accessories (Bags, Belts, Wallets)',
+        'Jewelry & Watches',
+        'Furniture (Sofas, Beds, Tables)',
+        'Home D\u00E9cor (Wall Art, Clocks, etc.)',
+        'Kitchen & Dining (Cookware, Dinnerware)',
+        'Home Furnishing',
+        'Lighting & Lamps ',
+        'Makeup & Cosmetics',
+        'Skin Care (Moisturizers, Sunscreens)',
+        'Hair Care (Shampoos, Hair Oils)',
+        'Personal Hygiene (Soaps, Sanitizers, Razors)',
+        'Fragrances (Perfumes, Deodorants)',
+        'Fruits & Vegetables',
+        'Beverages (Coffee, Tea, Soft Drinks)',
+        'Snacks & Packaged Foods',
+        'Cooking Essentials (Spices, Oils, Grains)',
+        'Baby Products',
+        'Pet Supplies',
+        'Sports Equipment (Cricket Bats, Yoga Mats)',
+        'Fitness Gear (Gym Equipment, Activewear)',
+        'Books (Fiction, Non-Fiction, Academic)',
+        'Stationery (Notebooks, Pens)',
+        'Musical Instruments',
+        'Craft & Hobbies Supplies',
+        'Car Accessories (Seat Covers, Air Fresheners)',
+        'Bike Accessories',
+        'Automotive Tools',
+        'Tyres & Alloys',
+        'Vitamins & Supplements',
+        'Medical Equipment',
+        'First Aid Supplies',
+        'Fitness Equipment',
+        'Toys (Educational, Action Figures, Dolls)',
+        'Baby Care (Diapers, Feeding Bottles)',
+        'Kids Furniture & Accessories',
+        'Tools & Hardware',
+        'Safety Equipment',
+        'Office Supplies',
+        'Cleaning Supplies',
+        'Gift Cards',
+        'Subscription Services',
+        'Seasonal Specials (Festive D\u00E9cor, Winterwear, etc.)'
+      ]
+    >;
+    Product_Title: Attribute.String;
+    Product_Video: Attribute.Media<'videos', true>;
+    Prouduct_DiscountPercentage: Attribute.Integer;
+    publishedAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    updatedBy: Attribute.Relation<
+      'api::product.product',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface PluginContentReleasesRelease extends Schema.CollectionType {
   collectionName: 'strapi_releases';
   info: {
@@ -799,6 +921,7 @@ declare module '@strapi/types' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
+      'api::product.product': ApiProductProduct;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;

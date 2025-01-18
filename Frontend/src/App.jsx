@@ -1,15 +1,15 @@
 // src/App.jsx
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-{/* Imports for Landingpage, Login, and Signup etc. */}
+{/* Imports for Landingpage, Login, and Signup etc. */ }
 import Landing from './pages/Landingpage';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 
-{/* Customer Imports */}
+{/* Customer Imports */ }
 import CustomerHomepage from './pages/Customer/CustomerHomepage';
 
-{/* Seller Imports */}
+{/* Seller Imports */ }
 import SellerHomepage from './pages/Seller/SellerHomepage';
 import SellerAddProduct from './pages/Seller/SellerAddProduct';
 import SellerProduct from './pages/Seller/SellerProduct';
@@ -19,8 +19,9 @@ import SHelp from './pages/Seller/SHelp';
 import SOrderManagement from './pages/Seller/SOrderManagement';
 import SSettings from './pages/Seller/SSettings';
 
-{/* Admin Imports */}
+{/* Admin Imports */ }
 import AdminHomepage from './pages/Admin/AdminHomepage';
+import Wishlist from './pages/Customer/Wishlist';
 
 const App = () => {
   return (
@@ -33,6 +34,7 @@ const App = () => {
 
         {/* Customer Routes */}
         <Route path="/Customer" element={<CustomerHomepage />} />
+        <Route path="/Customer/Wishlist" element={<Wishlist />} />
 
         {/* Seller Routes */}
         <Route path="/Seller" element={<SellerHomepage />} />
@@ -43,7 +45,7 @@ const App = () => {
         <Route path="/SHelp" element={<SHelp />} />
         <Route path="/SOrderManagement" element={<SOrderManagement />} />
         <Route path="/SSettings" element={<SSettings />} />
-        
+
         {/* Admin Routes */}
         <Route path="/Admin" element={<AdminHomepage />} />
 
