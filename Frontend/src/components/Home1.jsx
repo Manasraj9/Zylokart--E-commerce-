@@ -17,12 +17,20 @@ const Home1 = () => {
     ];
 
     const deals = [
-        { name: "Top Offers", image: "/api/placeholder/150/150", discount: "Up to 80% Off" },
-        { name: "Mobiles", image: "/api/placeholder/150/150", discount: "From ₹6,999" },
-        { name: "Fashion", image: "/api/placeholder/150/150", discount: "50-80% Off" },
-        { name: "Electronics", image: "/api/placeholder/150/150", discount: "Up to 45% Off" },
-        { name: "Home", image: "/api/placeholder/150/150", discount: "Min 70% Off" },
+        { name: "Top Offers", image: "../src/images/top.webp", discount: "Up to 80% Off" },
+        { name: "Mobiles", image: "../src/images/phone.webp", discount: "From ₹6,999" },
+        { name: "Fashion", image: "../src/images/fashion.jpg", discount: "50-80% Off" },
+        { name: "Electronics", image: "../src/images/elec.jpg", discount: "Up to 45% Off" },
+        { name: "Home", image: "../src/images/home.jpg", discount: "Min 70% Off" },
     ];
+    const brand = [
+        { name: "Top Offers", image: "../src/images/top.webp", discount: "Up to 80% Off" },
+        { name: "Mobiles", image: "../src/images/phone.webp", discount: "From ₹6,999" },
+        { name: "Fashion", image: "../src/images/fashion.jpg", discount: "50-80% Off" },
+        { name: "Electronics", image: "../src/images/elec.jpg", discount: "Up to 45% Off" },
+        { name: "Home", image: "../src/images/home.jpg", discount: "Min 70% Off" },
+    ];
+    
 
     return (
         <div className="min-h-screen bg-gray-100">
@@ -124,11 +132,11 @@ const Home1 = () => {
             <div className="max-w-7xl mx-auto px-4 py-8">
                 <h2 className="text-2xl font-bold mb-6">Featured Brands</h2>
                 <div className="grid grid-cols-6 gap-4">
-                    {[1, 2, 3, 4, 5, 6].map((index) => (
+                    {brand.map((brand,index) => (
                         <div key={index} className="bg-white rounded-lg shadow-lg p-4 hover:shadow-xl transition-shadow cursor-pointer">
                             <div className="aspect-square mb-4 overflow-hidden rounded-lg">
                                 <img
-                                    src={`/api/placeholder/150/150`}
+                                    src={brand.image}
                                     alt={`Brand ${index}`}
                                     className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                                 />
