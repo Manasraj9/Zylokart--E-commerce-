@@ -5,28 +5,28 @@ const ProductCard = () => {
   const banners = [
     {
       id: 1,
-      imageUrl: "/api/placeholder/1200/300",
+      imageSrc: "../src/images/banner3.jpg",
       alt: "Special Sale Banner",
       title: "End of Season Sale",
       link: "/sale"
     },
     {
       id: 2,
-      imageUrl: "/api/placeholder/1200/300",
+      imageSrc: "../src/images/banner2.webp",
       alt: "Electronics Deals",
       title: "Top Electronics Deals",
       link: "/electronics"
     },
     {
       id: 3,
-      imageUrl: "/api/placeholder/1200/300",
+      imageSrc: "../src/images/banner1.jpeg",
       alt: "Fashion Collection",
       title: "New Fashion Collection",
       link: "/fashion"
     },
     {
       id: 4,
-      imageUrl: "/api/placeholder/1200/300",
+      imageSrc: "../src/images/banner4.jpg",
       alt: "Home Appliances",
       title: "Home Appliances Sale",
       link: "/appliances"
@@ -79,7 +79,7 @@ const ProductCard = () => {
                 className="min-w-full h-full relative"
               >
                 <img
-                  src={banner.imageUrl}
+                  src={banner.imageSrc}
                   alt={banner.alt}
                   className="w-full h-full object-cover"
                 />
