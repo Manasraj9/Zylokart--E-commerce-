@@ -5,15 +5,78 @@ const Home1 = () => {
     const [searchQuery, setSearchQuery] = React.useState('');
     
     const categories = [
-        { name: "Grocery", icon: "🛒" },
-        { name: "Mobiles", icon: "📱" },
-        { name: "Fashion", icon: "👕" },
-        { name: "Electronics", icon: "💻" },
-        { name: "Home & Furniture", icon: "🏠" },
-        { name: "Appliances", icon: "🔌" },
-        { name: "Travel", icon: "✈️" },
-        { name: "Beauty & Toys", icon: "🎮" },
-        { name: "Two Wheelers", icon: "🛵" }
+        { name: "Grocery", 
+            icon: "🛒",
+            subcategories: [
+                { name: "Fruits & Vegetables", items: ["Fresh Fruits", "Fresh Vegetables", "Herbs & Seasonings"] },
+                { name: "Dairy & Breakfast", items: ["Milk", "Bread", "Eggs", "Butter"] },
+                { name: "Staples", items: ["Rice", "Flour", "Pulses", "Sugar"] }
+            ] 
+        },
+        { name: "Mobiles",
+             icon: "📱",
+             subcategories: [
+                { name: "Smartphones", items: ["iPhone", "Samsung", "OnePlus", "Xiaomi"] },
+                { name: "Accessories", items: ["Cases", "Chargers", "Screen Guards"] },
+                { name: "Tablets", items: ["iPad", "Samsung Tablets", "Lenovo Tablets"] }
+            ]
+         },
+        { name: "Fashion", 
+            icon: "👕",
+            subcategories: [
+                { name: "Men's Wear", items: ["T-Shirts", "Shirts", "Jeans", "Footwear"] },
+                { name: "Women's Wear", items: ["Dresses", "Tops", "Sarees", "Footwear"] },
+                { name: "Kids' Wear", items: ["Boys Clothing", "Girls Clothing", "Kids Footwear"] }
+            ]
+        },
+        { name: "Electronics",
+         icon: "💻" ,
+         subcategories: [
+            { name: "Computers", items: ["Laptops", "Desktops", "Tablets", "Smartphones"] },
+            { name: "Gaming", items: ["Gaming Consoles", "Controllers", "Headsets", "Accessories"] },
+            { name: "Cameras", items: ["Digital Cameras", "Camera Lenses", "Camera Accessories"] }
+        ]
+    },
+        { name: "Home & Furniture",
+             icon: "🏠",
+             subcategories: [
+                { name: "Kitchen", items: ["Cookware", "Dinnerware", "Cooking Utensils", "Kitchen Accessories"] },
+                { name: "Bedroom", items: ["Beds", "Mattresses", "Bedding Sets", "Bedroom Accessories"] },
+                { name: "Living Room", items: ["Sofas", "Chairs", "Tables", "Couches"] }
+             ]
+        },
+        { name: "Appliances",
+             icon: "🔌",
+             subcategories: [
+                { name: "Kitchen Appliances", items: ["Microwave Ovens", "Toasters", "Blenders", "Coffee Makers"] },
+                { name: "Home Appliances", items: ["Refrigerators", "Washing Machines", "Dishwashers", "Air Conditioners"] },
+                { name: "Cleaning Appliances", items: ["Vacuum Cleaners", "Mops", "Sweepers", "Dust Mops"] } 
+             ] 
+        },
+        { name: "Travel",
+             icon: "✈️",
+             subcategories: [
+                { name: "Flights", items: ["One-Way Flights", "Round-Trip Flights", "Multi-City Flights"] },
+                { name: "Hotels", items: ["Budget Hotels", "Luxury Hotels", "Resorts", "Guest Houses"] },
+                { name: "Cabs", items: ["Local Cabs", "Inter-City Cabs", "Airport Cabs", "Mini Cabs"] }
+             ] 
+        },
+        { name: "Beauty & Toys",
+             icon: "🎮",
+             subcategories: [
+                { name: "Beauty", items: ["Makeup", "Skincare", "Haircare", "Fragrances"] },
+                { name: "Toys", items: ["Action Figures", "Dolls", "Puzzles", "Educational Toys"] },
+                { name: "Games", items: ["Board Games", "Card Games", "Video Games", "Board Games"] }
+             ] 
+        },
+        { name: "Two Wheelers",
+             icon: "🛵",
+             subcategories: [
+                { name: "Scooters", items: ["Scooter", "Scooter", "Scooter", "Scooter"] },
+                { name: "Motorcycles", items: ["Motorcycle", "Motorcycle", "Motorcycle", "Motorcycle"] },
+                { name: "Bikes", items: ["Bike", "Bike", "Bike", "Bike"] }
+             ] 
+        }
     ];
 
     const deals = [
@@ -73,23 +136,45 @@ const Home1 = () => {
                 </div>
             </header>
 
-            {/* Categories Bar */}
-            <div className="bg-white shadow">
+            {/* Categories Bar with Dropdowns */}
+            <div className="bg-white shadow relative">
                 <div className="max-w-7xl mx-auto px-4">
                     <div className="flex justify-between py-4">
                         {categories.map((category, index) => (
-                            <div key={index} className="flex flex-col items-center gap-2 cursor-pointer group">
-                                <span className="text-2xl group-hover:transform group-hover:scale-110 transition-transform">
-                                    {category.icon}
-                                </span>
-                                <span className="text-sm font-medium text-gray-800 group-hover:text-[#2874f0]">
-                                    {category.name}
-                                </span>
+                            <div key={index} className="group relative">
+                                <div className="flex flex-col items-center gap-2 cursor-pointer">
+                                    <span className="text-2xl group-hover:transform group-hover:scale-110 transition-transform">
+                                        {category.icon}
+                                    </span>
+                                    <span className="text-sm font-medium text-gray-800 group-hover:text-[#2874f0]">
+                                        {category.name}
+                                    </span>
+                                </div>
+
+                                {/* Dropdown Menu */}
+                                <div className="invisible group-hover:visible absolute top-full left-0 w-64 bg-white shadow-lg rounded-lg mt-1 z-50 opacity-0 group-hover:opacity-100 transition-all duration-300">
+                                    {category.subcategories?.map((subcat, subIndex) => (
+                                        <div key={subIndex} className="p-4 hover:bg-gray-50">
+                                            <h3 className="font-medium text-gray-900 mb-2">{subcat.name}</h3>
+                                            <ul className="space-y-2">
+                                                {subcat.items.map((item, itemIndex) => (
+                                                    <li key={itemIndex}>
+                                                        <a href="#" className="text-gray-600 hover:text-[#2874f0] text-sm block">
+                                                            {item}
+                                                        </a>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
                         ))}
                     </div>
                 </div>
             </div>
+
+            {/* Product Card */}
             <ProductCard />
             {/* Deals Section */}
             <div className="max-w-7xl mx-auto px-4 py-8">
