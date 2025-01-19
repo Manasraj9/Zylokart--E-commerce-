@@ -1,6 +1,8 @@
 // src/App.jsx
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
 {/* Imports for Landingpage, Login, and Signup etc. */ }
 import Landing from './pages/Landingpage';
 import Login from './pages/Login';
@@ -8,6 +10,7 @@ import Signup from './pages/Signup';
 
 {/* Customer Imports */ }
 import CustomerHomepage from './pages/Customer/CustomerHomepage';
+import Wishlist from './pages/Customer/Wishlist';
 
 {/* Seller Imports */ }
 import SellerHomepage from './pages/Seller/SellerHomepage';
@@ -21,11 +24,12 @@ import SSettings from './pages/Seller/SSettings';
 
 {/* Admin Imports */ }
 import AdminHomepage from './pages/Admin/AdminHomepage';
-import Wishlist from './pages/Customer/Wishlist';
+
 
 const App = () => {
   return (
     <Router>
+       <ToastContainer position="top-right" autoClose={2000} hideProgressBar />
       <Routes>
         {/* Routes for Landingpage, Login, and Signup etc. */}
         <Route path="/" element={<Landing />} />
